@@ -1,0 +1,99 @@
+.App{
+  margin-top: 30px;
+}
+.captura{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input, label{
+  font-size: larger;
+  font-weight: bold;
+}
+
+.botones{
+  display: flex;
+  margin-left: 20px;
+}
+
+.botonEstilo{
+  background-color: #0c6cfc;
+  color: white;
+  font-weight: bold;
+  font-size: larger;
+  padding: 5px 30px;
+}
+
+.agrega{
+  background-color: green;
+  margin-left: 10px;  
+  color: white;
+  font-weight: bold;
+  font-size: larger;
+  padding: 5px 30px;
+}
+
+.borra{
+  background-color: red;
+  margin-left: 10px;  
+  color: white;
+  font-weight: bold;
+  font-size: larger;
+  padding: 5px 30px;
+}
+
+.muestra{
+  border: 2px solid blue;
+  margin: auto;
+  width: 20%;
+  margin-top: 50px;
+}
+
+ul{
+  list-style: none;
+  justify-content: center;
+}
+
+li{
+  font-weight: bold;
+  font-size: larger;
+  padding: 5px;  
+}
+
+.id{
+  padding-left: 62px;
+}
+
+.lista{
+  border: 2px solid gray;
+  margin: auto;
+  width: 15%;
+  font-weight: bold;
+  /* text-align: center; */
+  font-size: large;
+}
+
+.listaUsuarios{
+  list-style: none;
+  justify-content: left;
+  padding-left: 60px;
+}
+
+.texto{
+  border: 2px solid gray;
+  margin: auto;
+  width: 40%;
+  height: 30px;
+  margin-top: 10px;
+  color: red;
+  font-size: larger;
+  font-weight: bold;
+  text-align: center;
+}
+
+h3{
+  text-align: center;
+  justify-content: center;
+}
+
