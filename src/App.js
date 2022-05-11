@@ -50,8 +50,7 @@ function App() {
     }
   }  
 
-  async function handleCreate()
-  {
+  async function handleCreate() {
     console.log("Entro a crear")
     setId("");
     setNombre("");
@@ -64,15 +63,16 @@ function App() {
 
       if (busqueda.length > 0){ 
         setExiste(false);
-
+        console.log("captura: ", captura);
         busqueda.map((dato) => {
           if (dato.nombre === captura){
             console.log("Se cumple el if del map");
-            setExiste(true);
+            const verdadero = true;
+            setExiste(verdadero);
             console.log("Si existe: ", existe);
             setMensaje("Este nombre ya existe en la Base de Datos");
           }
-          return (existe, id, nombre);
+          return (id, nombre);
         })   
 
         console.log("Existe: ", existe);
@@ -95,7 +95,7 @@ function App() {
     console.log("Entro a enviar nombre");
     console.log(nombreCapturado);
     const arreglo = {nombre: nombreCapturado};
-    // try{
+    try{
       fetch("http://localhost:5000/usuarios", { 
         method: "POST", 
         headers: { "Content-Type" : "application/json" }, 
@@ -103,11 +103,11 @@ function App() {
       }).then(respuesta => {return respuesta.json()})
         .then(res => {setbusqueda(res)})
 
-        // setMensaje("Se envió el nombre con éxito");
-    // }
-    // catch (error) {
-    //   setMensaje(`Error: ${error}`);
-    // }    
+        setMensaje("Se envió el nombre con éxito");
+    }
+    catch (error) {
+      setMensaje(`Error: ${error}`);
+    }    
   }
 
   async function handleDelete(){
@@ -117,7 +117,6 @@ function App() {
 
     if(captura !== ""){
       if (id !== "") {
-        console.log("Entro a borrar")
         BorraRegistro(id);     
       }else {
         setMensaje("El nombre a borrar debe existir en la Base de Datos");  
@@ -130,14 +129,20 @@ function App() {
   function BorraRegistro(idCapturado){
     console.log("Entro a enviar id");
     console.log(idCapturado);
-    const arreglo = {idCapturado};
-    // try{
+    const arreglo = {id: idCapturado};
+    try{
       fetch("http://localhost:5000/usuarios", { 
-        method: "POST", 
+        method: "DELETE", 
         headers: { "Content-Type" : "application/json" }, 
         body: JSON.stringify(arreglo)
       }).then(respuesta => {return respuesta.json()})
         .then(res => {setbusqueda(res)})
+
+        setMensaje("Se envió el id con éxito");
+    }
+    catch (error) {
+          setMensaje(`Error: ${error}`);
+    }  
   }
 
   return(
