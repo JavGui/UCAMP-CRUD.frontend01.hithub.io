@@ -3,14 +3,20 @@ import './App.css';
 
 function App() {
   const [id, setId] = useState("");
-  const [nombre, setNombre] = useState(""); 
+  const [nombre, setNombre] = useState("");
+  const [nuevoNombre, setNuevoNombre] = useState(""); 
   const [captura, setCaptura] = useState("");
   const [busqueda, setbusqueda] = useState([]);
-  const [existe, setExiste] = useState(false);
   const [mensaje, setMensaje] = useState(false);
 
   function handleChange(e){
     setCaptura (e.target.value);
+    setNuevoNombre("");
+    setMensaje(" ");
+  }
+
+  function handleChangeDos(e){
+    setNuevoNombre (e.target.value);
     setMensaje(" ");
   }
 
@@ -18,20 +24,15 @@ function App() {
     fetch('http://localhost:5000/usuarios')
     .then(respuesta => respuesta.json())
     .then(usuario => setbusqueda(usuario))
-    console.log(busqueda);
   }, []);
   
   async function handleSubmit(){
-    console.log("Entro a submit");
     setId("");
     setNombre("");
-
     if(captura !== ""){
-      console.log("Entro a leer");
       await fetch('http://localhost:5000/usuarios')
       .then(respuesta => respuesta.json())
       .then(usuario => setbusqueda(usuario))
-
       if (busqueda.length > 0){ 
         setMensaje("Este nombre no se encuentra en la Base de Datos")
         busqueda.map((dato) => {
@@ -43,7 +44,7 @@ function App() {
           return (id, nombre);
         })
       } else{
-        setMensaje("No se cargaron datos");
+        setMensaje("Este nombre no se encuentra en la Base de Datos");
       }
     }else {
       setMensaje("Debe capturar un nombre antes de pulsar algún botón");
@@ -51,40 +52,29 @@ function App() {
   }  
 
   async function handleCreate() {
-    console.log("Entro a crear")
     setId("");
     setNombre("");
-
     if(captura !== ""){
-      console.log("Entro a leer")
       await fetch('http://localhost:5000/usuarios')
       .then(respuesta => respuesta.json())
       .then(usuario => setbusqueda(usuario))
-
       if (busqueda.length > 0){ 
-        setExiste(false);
-        console.log("captura: ", captura);
+        let verdadero = false;
         busqueda.map((dato) => {
           if (dato.nombre === captura){
-            console.log("Se cumple el if del map");
-            const verdadero = true;
-            setExiste(verdadero);
-            console.log("Si existe: ", existe);
+            verdadero = true;
             setMensaje("Este nombre ya existe en la Base de Datos");
           }
           return (id, nombre);
-        })   
-
-        console.log("Existe: ", existe);
-
-        if (existe === false){ 
+        })
+        if (verdadero === false){ 
           AgregaRegistro(captura);        
         }else {
           setId("");
           setNombre("");
         }
       }else {
-        setMensaje("No se cargaron datos");  
+        AgregaRegistro(captura);  
       }
     }else {
       setMensaje("Debe capturar un nombre antes de pulsar algún botón");
@@ -92,8 +82,6 @@ function App() {
   }
 
   function AgregaRegistro(nombreCapturado){
-    console.log("Entro a enviar nombre");
-    console.log(nombreCapturado);
     const arreglo = {nombre: nombreCapturado};
     try{
       fetch("http://localhost:5000/usuarios", { 
@@ -103,7 +91,7 @@ function App() {
       }).then(respuesta => {return respuesta.json()})
         .then(res => {setbusqueda(res)})
 
-        setMensaje("Se envió el nombre con éxito");
+        setMensaje("Se grabó el nombre con éxito");
     }
     catch (error) {
       setMensaje(`Error: ${error}`);
@@ -111,24 +99,18 @@ function App() {
   }
 
   async function handleDelete(){
-    console.log("Entro a borrar")
-    setId("");
-    setNombre("");
-
     if(captura !== ""){
       if (id !== "") {
         BorraRegistro(id);     
       }else {
-        setMensaje("El nombre a borrar debe existir en la Base de Datos");  
+        setMensaje("Debe Buscar el nombre y si existe, entonces orpima Borrar");  
       }         
     }else {
-      setMensaje("Debe buscar el nombre y después pulsar Borrar");
+      setMensaje("Debe capturar un nombre antes de pulsar algún botón");
     }
   }
 
   function BorraRegistro(idCapturado){
-    console.log("Entro a enviar id");
-    console.log(idCapturado);
     const arreglo = {id: idCapturado};
     try{
       fetch("http://localhost:5000/usuarios", { 
@@ -137,20 +119,56 @@ function App() {
         body: JSON.stringify(arreglo)
       }).then(respuesta => {return respuesta.json()})
         .then(res => {setbusqueda(res)})
-
-        setMensaje("Se envió el id con éxito");
+        setMensaje("Se borró el Usuario con éxito");
+        setId("");
+        setNombre("");
     }
     catch (error) {
           setMensaje(`Error: ${error}`);
     }  
   }
 
+  async function handleModify(){
+    if(captura !== ""){
+      if (id !== "") {
+        if(nuevoNombre !== ""){
+          console.log("Voy a modificar el nombre");
+          console.log("nuevoNombre: ", nuevoNombre);
+          ModificaRegistro(id);    
+        }else {
+          setMensaje("Debe capturar el nuevo nombre");
+        }
+      }else {
+        setMensaje("El nombre a modificar debe existir en la Base de Datos");  
+      }         
+    }else {
+      setMensaje("Debe Buscar el nombre y si existe, entonces oprimir Modificar")
+    }
+  }
+
+  function ModificaRegistro(idCapturado){
+    const arreglo = {id: idCapturado, nombre: nuevoNombre};
+    try{
+      fetch("http://localhost:5000/usuarios", { 
+        method: "PUT", 
+        headers: { "Content-Type" : "application/json" }, 
+        body: JSON.stringify(arreglo)
+      }).then(respuesta => {return respuesta.json()})
+        .then(res => {setbusqueda(res)})
+        setMensaje("Se modificó el nombre con éxito");
+        setId("");
+        setNombre("");
+    }
+    catch (error) {
+          setMensaje(`Error: ${error}`);
+    }  
+  }
+  
   return(
     <div className="App">
       <div className="captura">
         <div className="input">
             <label>Nombre: </label>
-            {/* <input type="text" value={ nombre } onChange={ handleChange }/> */}
             <input type="text" onChange={ handleChange }/>
         </div>
 
@@ -164,19 +182,32 @@ function App() {
             <div>
               <button className="botonEstilo borra" type="button" onClick={ ()=>handleDelete() } >Borrar</button>
             </div>
+            <div>
+              <button className="botonEstilo cambia" type="button" onClick={ ()=>handleModify() } >Modificar</button>
+            </div>
         </div>
       </div>
 
-      <div className="muestra">
-        <ul className="datos">
-            <li className='id'>Id: { id }</li>
-            <li className='nombre'>Nombre: { nombre }</li>
-        </ul>
+      <div className="modifica">
+        <div className="muestra">
+          <ul className="datos">
+              <li className='id'>Id: { id }</li>
+              <li className='nombre'>Nombre: { nombre }</li>
+          </ul>
+        </div>
+        <div className="inputCambia">
+            <div className="nuevoNombre">
+              <label>Nuevo nombre: </label>
+              <input type="text" value={ nuevoNombre} onChange={ handleChangeDos }/>
+            </div>
+        </div>
       </div>
+
       <div className="mensaje">
          <p className="texto">{mensaje}</p>
       </div>
       <br/>
+      <hr/>
       <div className="usuarios">
           <h3>Lista de Usuarios</h3>
           <div className="lista">
@@ -186,7 +217,6 @@ function App() {
             </ul>
           </div>
       </div>
-
     </div>
   )
 }

@@ -3,6 +3,7 @@
 }
 .captura{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -15,6 +16,7 @@ input, label{
 .botones{
   display: flex;
   margin-left: 20px;
+  margin-top: 20px;
 }
 
 .botonEstilo{
@@ -28,26 +30,41 @@ input, label{
 .agrega{
   background-color: green;
   margin-left: 10px;  
-  color: white;
-  font-weight: bold;
-  font-size: larger;
-  padding: 5px 30px;
 }
 
 .borra{
   background-color: red;
   margin-left: 10px;  
-  color: white;
-  font-weight: bold;
-  font-size: larger;
-  padding: 5px 30px;
+}
+
+.cambia{
+  background-color: grey;
+  margin-left: 10px;  
+}
+
+.modifica{
+  display: flex;
+  flex-direction: row; 
+  align-content: center ;
+  justify-content: center;
 }
 
 .muestra{
   border: 2px solid blue;
-  margin: auto;
   width: 20%;
   margin-top: 50px;
+}
+
+.inputCambia{
+  margin-top: 30px;
+  margin-left: 20px;
+  text-align: center;
+}
+
+.nuevoNombre{
+  display: flex;
+  flex-direction: column;
+  margin-top: 35px;
 }
 
 ul{
@@ -56,6 +73,7 @@ ul{
 }
 
 li{
+  border: 2px  blue;
   font-weight: bold;
   font-size: larger;
   padding: 5px;  
@@ -68,7 +86,7 @@ li{
 .lista{
   border: 2px solid gray;
   margin: auto;
-  width: 15%;
+  width: 20%;
   font-weight: bold;
   /* text-align: center; */
   font-size: large;
